@@ -34,9 +34,9 @@ window.onload = () => {
   let p = 0;
   const messages = [
     "Checking UI modules...",
-    "Loading glass interface...",
-    "Preparing apps...",
-    "Starting Emmy system...",
+    "Loading cyan-rose glass theme...",
+    "Preparing applications...",
+    "Starting Emmy assistant...",
     "Launching NeuraLib OS..."
   ];
 
@@ -55,10 +55,10 @@ window.onload = () => {
         emy("Hi, I'm Emmy — your guide. Open apps from the dock.");
       }, 700);
     }
-  }, 600);
+  }, 650);
 };
 
-/* MAIN WINDOW CONTROLS */
+/* WINDOW CONTROLS */
 function closeMainWindow() {
   document.getElementById("mainWindow").style.display = "none";
   emy("Main panel closed.");
@@ -87,7 +87,7 @@ function maximizeMainWindow() {
   }
 }
 
-/* TABS SYSTEM */
+/* TABS */
 function renderTabs() {
   tabs.innerHTML = "";
 
@@ -115,7 +115,7 @@ function switchTab(appId) {
   renderTabs();
 }
 
-/* APPS */
+/* OPEN APPS */
 function openApp(appId) {
   document.getElementById("mainWindow").style.display = "block";
   document.getElementById("mainWindow").style.opacity = "1";
@@ -125,57 +125,27 @@ function openApp(appId) {
     return;
   }
 
-  if (appId === "ency") {
-    openTabs[appId] = { title: "Encyclopedia", html: encyclopediaHTML(), onLoad: null };
-    emy("Search anything here.");
-  }
+  if (appId === "ency") openTabs[appId] = { title: "Encyclopedia", html: encyclopediaHTML(), onLoad: null };
+  if (appId === "crafts") openTabs[appId] = { title: "Craft Studio", html: craftsHTML(), onLoad: null };
+  if (appId === "paint") openTabs[appId] = { title: "Paint", html: paintHTML(), onLoad: setupPaint };
+  if (appId === "notes") openTabs[appId] = { title: "Notes", html: notesHTML(), onLoad: setupNotes };
+  if (appId === "worldclock") openTabs[appId] = { title: "World Clock", html: worldClockHTML(), onLoad: setupWorldClock };
+  if (appId === "voice") openTabs[appId] = { title: "Voice Detector", html: voiceHTML(), onLoad: null };
+  if (appId === "fakenews") openTabs[appId] = { title: "Fake News Detector", html: fakeNewsHTML(), onLoad: null };
+  if (appId === "credits") openTabs[appId] = { title: "Credits", html: creditsHTML(), onLoad: null };
 
-  if (appId === "crafts") {
-    openTabs[appId] = { title: "Craft Studio", html: craftsHTML(), onLoad: null };
-    emy("Choose a craft to see steps.");
-  }
-
-  if (appId === "paint") {
-    openTabs[appId] = { title: "Paint", html: paintHTML(), onLoad: setupPaint };
-    emy("Paint something beautiful.");
-  }
-
-  if (appId === "notes") {
-    openTabs[appId] = { title: "Notes", html: notesHTML(), onLoad: setupNotes };
-    emy("Your notes auto-save.");
-  }
-
-  if (appId === "worldclock") {
-    openTabs[appId] = { title: "World Clock", html: worldClockHTML(), onLoad: setupWorldClock };
-    emy("Select a country to view time.");
-  }
-
-  if (appId === "voice") {
-    openTabs[appId] = { title: "Voice Detector", html: voiceHTML(), onLoad: null };
-    emy("This app can listen to your voice.");
-  }
-
-  if (appId === "fakenews") {
-    openTabs[appId] = { title: "Fake News Detector", html: fakeNewsHTML(), onLoad: null };
-    emy("Paste a headline to analyze it.");
-  }
-
-  if (appId === "credits") {
-    openTabs[appId] = { title: "Credits", html: creditsHTML(), onLoad: null };
-    emy("Thank you for exploring NeuraLib OS.");
-  }
-
+  emy("Opened " + openTabs[appId].title);
   switchTab(appId);
 }
 
-/* ENCYCLOPEDIA (WIKIPEDIA API) */
+/* ENCYCLOPEDIA */
 function encyclopediaHTML() {
   return `
     <h2>Encyclopedia</h2>
     <p style="opacity:0.8;margin-top:6px;">Search online using Wikipedia API.</p>
 
     <div class="card">
-      <input id="wikiInput" placeholder="Type something (plastic, moon, ocean...)" />
+      <input id="wikiInput" placeholder="Type anything (plastic, moon, ocean...)" />
       <button style="margin-top:12px;" onclick="wikiSearch()">Search</button>
       <div id="wikiResult" style="margin-top:14px;opacity:0.9;">Waiting...</div>
     </div>
@@ -216,7 +186,7 @@ async function wikiSearch() {
     emy("Search complete.");
 
   } catch (err) {
-    result.innerText = "Error loading data (maybe blocked by browser).";
+    result.innerText = "Error loading data.";
     emy("Something went wrong.");
   }
 }
@@ -472,11 +442,11 @@ function stopVoice() {
   emy("Stopped listening.");
 }
 
-/* FAKE NEWS */
+/* FAKE NEWS DETECTOR (IMPROVED) */
 function fakeNewsHTML() {
   return `
     <h2>Fake News Detector</h2>
-    <p style="opacity:0.8;margin-top:6px;">Gives a trust score.</p>
+    <p style="opacity:0.8;margin-top:6px;">This is a smart analyzer (not real fact-checking).</p>
 
     <div class="card">
       <textarea id="newsInput" style="height:140px;" placeholder="Paste a headline or paragraph..."></textarea>
@@ -487,7 +457,8 @@ function fakeNewsHTML() {
 }
 
 function analyzeNews() {
-  const input = document.getElementById("newsInput").value.toLowerCase();
+  const inputRaw = document.getElementById("newsInput").value;
+  const input = inputRaw.toLowerCase();
   const out = document.getElementById("newsResult");
 
   if (!input.trim()) {
@@ -496,52 +467,117 @@ function analyzeNews() {
     return;
   }
 
-  const clickbait = ["shocking", "unbelievable", "secret", "you won't believe", "viral", "breaking", "miracle"];
-  const emotion = ["fear", "panic", "destroy", "danger", "threat", "hate", "evil"];
-
-  let score = 100;
+  let score = 85;
   let signals = [];
+
+  const clickbait = [
+    "shocking", "unbelievable", "secret", "you won't believe",
+    "viral", "breaking", "miracle", "exposed", "truth revealed",
+    "must watch", "just happened"
+  ];
+
+  const emotion = [
+    "fear", "panic", "destroy", "danger", "threat", "hate",
+    "evil", "terrifying", "horrifying", "disaster", "warning"
+  ];
+
+  const conspiracy = [
+    "government hiding", "they don't want you to know",
+    "deep state", "cover-up", "agenda", "brainwashing"
+  ];
+
+  const trustedSources = [
+    "bbc", "reuters", "associated press", "ap news",
+    "the guardian", "nytimes", "washington post", "cnn"
+  ];
 
   clickbait.forEach(w => {
     if (input.includes(w)) {
-      score -= 12;
+      score -= 10;
       signals.push("Clickbait keyword: " + w);
     }
   });
 
   emotion.forEach(w => {
     if (input.includes(w)) {
-      score -= 8;
+      score -= 7;
       signals.push("Emotional trigger: " + w);
     }
   });
 
-  if (input.includes("!!!")) {
+  conspiracy.forEach(w => {
+    if (input.includes(w)) {
+      score -= 15;
+      signals.push("Conspiracy phrase: " + w);
+    }
+  });
+
+  trustedSources.forEach(w => {
+    if (input.includes(w)) {
+      score += 8;
+      signals.push("Mentions trusted source: " + w);
+    }
+  });
+
+  const capsRatio = (inputRaw.replace(/[^A-Z]/g, "").length) / (inputRaw.length || 1);
+  if (capsRatio > 0.25) {
+    score -= 18;
+    signals.push("Too many capital letters.");
+  }
+
+  const exclamations = (inputRaw.match(/!/g) || []).length;
+  if (exclamations >= 3) {
     score -= 15;
     signals.push("Too many exclamation marks.");
+  } else if (exclamations === 2) {
+    score -= 8;
+    signals.push("Excessive exclamation marks.");
   }
 
-  if (input.length < 45) {
+  if (inputRaw.length < 50) {
+    score -= 12;
+    signals.push("Too short (low context).");
+  }
+
+  const qmarks = (inputRaw.match(/\?/g) || []).length;
+  if (qmarks >= 2) {
     score -= 10;
-    signals.push("Too short (possible manipulation).");
+    signals.push("Too many question marks.");
   }
 
+  if (score > 100) score = 100;
   if (score < 0) score = 0;
 
-  let status = "Trusted";
-  if (score < 70) status = "Suspicious";
-  if (score < 45) status = "Highly Suspicious";
+  let status = "Likely Trustworthy";
+  let tint = "rgba(127,214,210,0.35)";
+
+  if (score < 70) {
+    status = "Possibly Misleading";
+    tint = "rgba(217,164,178,0.35)";
+  }
+
+  if (score < 45) {
+    status = "High Fake News Risk";
+    tint = "rgba(255,80,120,0.35)";
+  }
 
   out.innerHTML = `
-    <h3>Trust Score: ${score}/100</h3>
-    <p style="margin-top:8px;"><b>Status:</b> ${status}</p>
+    <div style="padding:14px;border-radius:18px;border:1px solid rgba(255,255,255,0.12);
+                background:${tint}; backdrop-filter: blur(12px);">
+      <h3 style="font-size:18px;">Trust Score: ${score}/100</h3>
+      <p style="margin-top:8px;"><b>Status:</b> ${status}</p>
+    </div>
 
-    <div style="margin-top:12px;">
+    <div style="margin-top:14px;">
       <b>Signals:</b>
       <ul style="margin-top:10px;padding-left:18px;line-height:1.7;">
         ${signals.length ? signals.map(s => `<li>${s}</li>`).join("") : "<li>No suspicious patterns detected.</li>"}
       </ul>
     </div>
+
+    <p style="margin-top:14px;opacity:0.7;font-size:12px;">
+      Note: This is a heuristic analyzer, not an official fact-check tool.
+    </p>
   `;
 
   emy("Analysis complete.");
@@ -559,7 +595,7 @@ function creditsHTML() {
       </div>
 
       <div style="margin-top:14px;opacity:0.7;font-size:13px;">
-        NeuraLib OS • WebOS Pro v6
+        NeuraLib OS • WebOS Pro Final
       </div>
     </div>
   `;
