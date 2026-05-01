@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeuraLib OS</title>
+
+  <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+
+  <!-- WALLPAPER -->
+  <div class="wallpaper">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+    <div class="stars"></div>
+  </div>
+
+  <!-- BOOT -->
+  <div class="boot" id="boot">
+    <div class="boot-card">
+      <div class="boot-logo">NEURALIB</div>
+      <div class="boot-text" id="bootText">Starting system...</div>
+      <div class="boot-bar">
+        <div class="boot-fill" id="bootFill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESKTOP -->
+  <div class="desktop">
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div class="top-left">
+        <span class="top-logo"></span>
+        <span class="top-name">NeuraLib OS</span>
+      </div>
+
+      <div class="top-right">
+        <span id="clock">--:--</span>
+      </div>
+    </div>
+
+    <!-- MAIN WINDOW (TABS SYSTEM) -->
+    <div class="main-window" id="mainWindow">
+
+      <div class="main-bar">
+        <div class="main-actions">
+          <button class="close" onclick="closeMainWindow()"></button>
+          <button class="min" onclick="minimizeMainWindow()"></button>
+          <button class="max" onclick="maximizeMainWindow()"></button>
+        </div>
+
+        <div class="main-title" id="mainTitle">Welcome</div>
+      </div>
+
+      <div class="tabs" id="tabs">
+        <!-- tabs will appear here -->
+      </div>
+
+      <div class="main-content" id="appContent">
+        <div class="welcome">
+          <h1>Welcome to NeuraLib OS</h1>
+          <p>
+            Aesthetic WebOS system with tools, creativity apps, and smart detectors.
+          </p>
+          <p style="margin-top:12px;opacity:0.7;">
+            Use the dock below to open apps.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- DOCK -->
+    <div class="dock">
+
+      <div class="dock-item" onclick="openApp('ency')">
+        <div class="dock-icon">📚</div>
+        <span>Ency</span>
+      </div>
+
+      <div class="dock-item" onclick="openApp('crafts')">
+        <div class="dock-icon">✂️</div>
+        <span>Crafts</span>
+      </div>
+
+      <div class="dock-item" onclick="openApp('paint')">
+        <div class="dock-icon">🎨</div>
+        <span>Paint</span>
+      </div>
+
+      <div class="dock-item" onclick="openApp('notes')">
+        <div class="dock-icon">📝</div>
+        <span>Notes</span>
+      </div>
+
+      <div class="dock-item" onclick="openApp('worldclock')">
+        <div class="dock-icon">🌍</div>
+        <span>Clock</span>
+      </div>
+
+      <div class="dock-item" onclick="openApp('voice')">
+        <div class="dock-icon">🎙️</div>
+        <span>Voice</span>
+      </div>
+
+      <div class="dock-item" onclick="openApp('fakenews')">
+        <div class="dock-icon">📰</div>
+        <span>News</span>
+      </div>
+
+      <div class="dock-item" onclick="openApp('credits')">
+        <div class="dock-icon">🌸</div>
+        <span>Credits</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- EMMY -->
+  <div class="emy" id="emy">
+    <div class="emy-bubble" id="emyBubble">Hi, I'm Emmy — your guide.</div>
+
+    <div class="emy-body">
+      <div class="emy-face">
+        <div class="eye left"></div>
+        <div class="eye right"></div>
+        <div class="lash left"></div>
+        <div class="lash right"></div>
+        <div class="blush left"></div>
+        <div class="blush right"></div>
+        <div class="beak"></div>
+      </div>
+
+      <div class="wing left"></div>
+      <div class="wing right"></div>
+      <div class="tail"></div>
+    </div>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
